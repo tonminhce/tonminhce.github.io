@@ -2,7 +2,7 @@ import { GitHubIcon, LinkedInIcon, XIcon } from "@/components/icons";
 
 export const RESUME_DATA = {
   name: "Nguyen Ton Minh",
-  initials: "BJ",
+  initials: "tonminhce",
   location: "Ho Chi Minh city, Vietnam",
   locationLink:
     "https://www.google.com/maps/place/H%E1%BB%93+Ch%C3%AD+Minh,+Th%C3%A0nh+ph%E1%BB%91+H%E1%BB%93+Ch%C3%AD+Minh",
@@ -10,7 +10,7 @@ export const RESUME_DATA = {
   about:
     "Junior Full Stack Engineer focused on building products with extra attention to detail",
   summary:
-    "As a Junior Full Stack Engineer, I am actively engaged in shaping a product from its inception, working collaboratively within a team that values learning and innovation. My foundational tech stack comprises Javascript, Node.js, and Docker, and I am currently self-educating in DevOps technologies such as Kubernetes, AWS, and Azure to broaden my skill set and contribute more effectively to the infrastructure and deployment aspects of our projects.",
+    "As a Junior Full Stack Engineer, I am actively engaged in shaping a product from its inception, working collaboratively within a team that values learning and innovation. I am currently self-educating in DevOps technologies such as Kubernetes, AWS, and Azure to broaden my skill set and contribute more effectively to the infrastructure and deployment aspects of our projects.",
   personalWebsiteUrl: "https://tonminhce.site",
   contact: {
     email: "tonminhwork@gmail.com",
@@ -46,7 +46,7 @@ export const RESUME_DATA = {
       start: "June 2023",
       end: "December 2023",
       description:
-        "Implemented new features, led squad, worked on improving the way developers ship the code, started migration from Emotion to Tailwind CSS and more. Technologies: React, TypeScript, GraphQL",
+        "I contribute to real-world projects by developing new functionalities, troubleshooting tech issues, and providing tailored support to clients, utilizing technologies like React, Node.js, NestJS, Golang, and Docker to enhance our service offerings.",
     },
   ],
   skills: [
