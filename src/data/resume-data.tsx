@@ -65,7 +65,7 @@ export const RESUME_DATA = {
   ],
   projects: [
     {
-      title: "Smart Durian Mobile Application",
+      title: "iDurian Mobile Application",
       techStack: ["Computer Engineering Project", "React Native", "Node.js", "React"],
       description:
         "I develop both frontend and backend for this application by myself, aimed at monitoring LoRa sensor data, predicting weather, and controlling the canopy.",
@@ -94,6 +94,16 @@ export const RESUME_DATA = {
       },
     },
     {
+      title: "Smart Plug Mobile Application",
+      techStack: ["React Native", "Node.js", "School Project"],
+      description:
+        "I contribute to both frontend and hardware aspects of this project, collaborating with four other Computer Science students. Our teacher praised the project with an excellent grade.",
+      link: {
+        label: "github.com",
+        href: "https://github.com/ryanhoangt/smart-plug-mobile-app",
+      },
+    },
+    {
       title: "UWC-2.0",
       techStack: ["School Project", "Firebase", "Node.js", "React"],
       description:
@@ -104,16 +114,6 @@ export const RESUME_DATA = {
       },
     },
     {
-      title: "U-App",
-      techStack: ["Full Stack Developer", "React Native", "Laravel"],
-      description:
-        "U-APP is a holistic wellness platform tailored for Asian communities, focusing on mental and overall well-being with utmost respect for user privacy.",
-      link: {
-        label: "u-app.com.sg",
-        href: "https://www.u-app.com.sg/",
-      },
-    },
-    {
       title: "Programming Analysis Project",
       techStack: ["Python", "Data Science", "Side Project"],
       description:
@@ -121,6 +121,16 @@ export const RESUME_DATA = {
       link: {
         label: "github.com",
         href: "https://github.com/tonminhce/data-analyst",
+      },
+    },
+    {
+      title: "FIFO using HDL",
+      techStack: ["Verilog", "School Project"],
+      description:
+        "Design and implement a FIFO circuit using Verilog HDL. Write test benches to verify the implemented circuit.",
+      link: {
+        label: "github.com",
+        href: "https://github.com/tonminhce/fifo-buffer",
       },
     },
     {
@@ -138,6 +148,16 @@ export const RESUME_DATA = {
         label: "datagma.com",
         href: "https://datagma.com/",
       },
+          {
+      title: "U-App",
+      techStack: ["Full Stack Developer", "React Native", "Laravel"],
+      description:
+        "U-APP is a holistic wellness platform tailored for Asian communities, focusing on mental and overall well-being with utmost respect for user privacy.",
+      link: {
+        label: "u-app.com.sg",
+        href: "https://www.u-app.com.sg/",
+      },
+    },
     },
 
 
