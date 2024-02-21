@@ -66,7 +66,7 @@ export const RESUME_DATA = {
   projects: [
     {
       title: "iDurian Mobile Application",
-      techStack: ["Computer Engineering Project", "React Native", "Node.js", "React"],
+      techStack: ["Computer Engineering Project", "React Native", "Node.js", "React", "PostgreSQL", "Docker"],
       description:
         "I develop both frontend and backend for this application by myself, aimed at monitoring LoRa sensor data, predicting weather, and controlling the canopy.",
       link: {
@@ -76,8 +76,8 @@ export const RESUME_DATA = {
     },
     {
       title: "Ranked-Choice Voting Polls",
-      techStack: ["Side Project", "NestJS"],
-      description: "My personal polls voting application. Built with NestJS and React",
+      techStack: ["Side Project", "NestJS", "React", "Redis", "Docker"],
+      description: "My personal polls voting application. Built with NestJS and React. User can create a poll and other people can vote in that.",
       link: {
         label: "github.com",
         href: "https://github.com/tonminhce/nestjs-poll-app",
@@ -95,7 +95,7 @@ export const RESUME_DATA = {
     },
     {
       title: "Smart Plug Mobile Application",
-      techStack: ["React Native", "Node.js", "School Project"],
+      techStack: ["React Native", "Node.js","Docker", "School Project"],
       description:
         "I contribute to both frontend and hardware aspects of this project, collaborating with four other Computer Science students. Our teacher praised the project with an excellent grade.",
       link: {
@@ -150,7 +150,7 @@ export const RESUME_DATA = {
       },
           {
       title: "U-App",
-      techStack: ["Full Stack Developer", "React Native", "Laravel"],
+      techStack: ["Full Stack Developer", "React Native", "Laravel", "Docker"],
       description:
         "U-APP is a holistic wellness platform tailored for Asian communities, focusing on mental and overall well-being with utmost respect for user privacy.",
       link: {
