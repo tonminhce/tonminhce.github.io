@@ -94,6 +94,16 @@ export const RESUME_DATA = {
       },
     },
     {
+      title: "Simple Operating System",
+      techStack: [ "C/C++", "Linux (Ubuntu)", "School Project"],
+      description:
+        "Simple OS with three major modules: scheduler, synchronization, mechanism of memory allocation from virtual-to-physical memory.",
+      link: {
+        label: "github.com",
+        href: "https://github.com/tonible14012002/simpleOS",
+      },
+    },
+    {
       title: "Smart Plug Mobile Application",
       techStack: ["React Native", "Node.js","Docker", "School Project"],
       description:
