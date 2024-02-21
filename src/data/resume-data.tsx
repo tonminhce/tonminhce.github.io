@@ -42,8 +42,8 @@ export const RESUME_DATA = {
       company: "GTG Software",
       link: "https://www.gtgsoft.com/",
       badges: ["On-site"],
-      title: "Full Stack Developer Intern",
-      start: "June 2023",
+      title: "Software Engineer Intern",
+      start: "August 2023",
       end: "December 2023",
       description:
         "I contribute to real-world projects by developing new functionalities, troubleshooting tech issues, and providing tailored support to clients, utilizing technologies like React, Node.js, NestJS, Golang, and Docker to enhance our service offerings.",
