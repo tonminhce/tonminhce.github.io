@@ -65,6 +65,45 @@ export const RESUME_DATA = {
   ],
   projects: [
     {
+      title: "Smart Durian Mobile Application",
+      techStack: ["Computer Engineering Project", "React Native", "Node.js", "React"],
+      description:
+        "I develop both frontend and backend for this application by myself, aimed at monitoring LoRa sensor data, predicting weather, and controlling the canopy.",
+      link: {
+        label: "github.com",
+        href: "https://github.com/tonminhce/iot-mobile",
+      },
+    },
+    {
+      title: "Ranked-Choice Voting Polls",
+      techStack: ["Side Project", "NestJS"],
+      description: "My personal polls voting application. Built with NestJS and React",
+      link: {
+        label: "github.com",
+        href: "https://github.com/tonminhce/nestjs-poll-app",
+      },
+    },
+    {
+      title: "Cursor Control with Facial Movements",
+      techStack: ["Machine Learning", "OpenCV", "Python", "School Project"],
+      description:
+        "Application that using machine learning theory to control mouse with facial expressions.",
+      link: {
+        label: "github.com",
+        href: "https://github.com/tonminhce/machine-learning-project",
+      },
+    },
+    {
+      title: "UWC-2.0",
+      techStack: ["School Project", "Firebase", "Node.js", "React"],
+      description:
+        "Application which help manage Janitor, Collector and Trucks and assign it to the place that have waste to pick up. Build with React and Nodejs",
+      link: {
+        label: "github.com",
+        href: "https://github.com/tonminhce/UWC-2.0",
+      },
+    },
+    {
       title: "U-App",
       techStack: ["Full Stack Developer", "React Native", "Laravel"],
       description:
@@ -75,12 +114,13 @@ export const RESUME_DATA = {
       },
     },
     {
-      title: "tonminhce.site",
-      techStack: ["Side Project", "Next.js"],
-      description: "My personal website and blog. Built with Next.js",
+      title: "Programming Analysis Project",
+      techStack: ["Python", "Data Science", "Side Project"],
+      description:
+        "The project analyzes programming language trends and developer engagement through a Jupyter notebook using CSV datasets.",
       link: {
         label: "github.com",
-        href: "https://tonminhce.site/",
+        href: "https://github.com/tonminhce/data-analyst",
       },
     },
     {
@@ -93,41 +133,13 @@ export const RESUME_DATA = {
         "Kubernetes",
       ],
       description:
-        "A tool that provides real-time B2B data enrichment, email and phone number finding services.",
+        "A tool that provides real-time B2B data enrichment, email and phone number finding services. I was assigned to support my team for this project.",
       link: {
         label: "datagma.com",
         href: "https://datagma.com/",
       },
     },
-    {
-      title: "Cursor Control with Facial Movements",
-      techStack: ["Machine Learning", "OpenCV", "Python", "School Project"],
-      description:
-        "Application that using machine learning theory to control mouse with facial expressions",
-      link: {
-        label: "github.com",
-        href: "https://github.com/tonminhce/machine-learning-project",
-      },
-    },
-    {
-      title: "Data Analysis Project",
-      techStack: ["Python", "Data Science", "School Project"],
-      description:
-        "The project analyzes programming language trends and developer engagement through a Jupyter notebook using CSV datasets.",
-      link: {
-        label: "github.com",
-        href: "https://github.com/tonminhce/data-analyst",
-      },
-    },
-    {
-      title: "UWC-2.0",
-      techStack: ["School Project", "Firebase", "Node.js", "React"],
-      description:
-        "Application for Ho Chi Minh City Waste Handling System which help manage Janitor, Collector and Trucks and assign it to the place that have waste to pick up",
-      link: {
-        label: "github.com",
-        href: "https://github.com/tonminhce/UWC-2.0",
-      },
-    },
+
+
   ],
 } as const;
