@@ -187,6 +187,7 @@ export const RESUME_DATA = {
         label: "datagma.com",
         href: "https://datagma.com/",
       },
+              },
       {
       title: "U-App",
       techStack: [
@@ -199,7 +200,7 @@ export const RESUME_DATA = {
       link: {
         label: "u-app.com.sg",
         href: "https://www.u-app.com.sg/",
-        },
+
       },
     },
   ],
