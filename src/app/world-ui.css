@@ -1213,6 +1213,16 @@ body:has(.driving-page) [data-dialog-overlay] {
     width: 70px;
   }
 }
+/* Short portrait phones need the same clear driving area as landscape. */
+@media (max-width: 760px) and (max-height: 620px) {
+  .world-intro-compact {
+    display: none;
+  }
+  .is-intro .touch-drive {
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
 /* Keep the road usable on landscape phones as well as touch tablets. */
 @media (max-height: 650px) and (min-width: 761px) {
   .world-intro {
