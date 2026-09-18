@@ -14,8 +14,12 @@ import {
   Layers3,
   Terminal,
   Database,
+  Gamepad2,
 } from "lucide-react";
 import { HeroScene } from "@/components/hero-scene";
+import { OverviewMotion, MotionToggle } from "@/components/overview-motion";
+import { ExperienceDisclosure } from "@/components/experience-disclosure";
+import "./overview.css";
 import {
   experience,
   certifications,
@@ -43,46 +47,56 @@ const External = ({
 );
 export default function Overview() {
   return (
-    <>
+    <OverviewMotion>
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      <header className="site-header shell">
-        <Link href="/" className="wordmark" aria-label="Ton Minh, home">
-          <span className="brand-symbol">
-            m<span>.</span>
-          </span>
-          <span>
-            TON MINH<span className="wordmark-sub">SOFTWARE ENGINEER</span>
-          </span>
-        </Link>
-        <nav aria-label="Main navigation">
-          <a href="#work">Work</a>
-          <a href="#experience">Experience</a>
-          <a href="#about">About</a>
-          <a href="#contact" className="nav-contact">
-            Let’s talk <ArrowUpRight size={15} />
-          </a>
-        </nav>
-      </header>
+      <div className="overview-header">
+        <div className="reading-progress" aria-hidden="true" />
+        <header className="site-header shell">
+          <Link href="/" className="wordmark" aria-label="Ton Minh, home">
+            <span className="brand-symbol">
+              m<span>.</span>
+            </span>
+            <span>
+              TON MINH<span className="wordmark-sub">SOFTWARE ENGINEER</span>
+            </span>
+          </Link>
+          <div className="header-actions">
+            <nav aria-label="Main navigation">
+              <a href="#work">Work</a>
+              <a href="#experience">Experience</a>
+              <a href="#about">About</a>
+              <a href="#contact" className="nav-contact">
+                Let’s talk <ArrowUpRight size={15} />
+              </a>
+            </nav>
+            <MotionToggle />
+          </div>
+        </header>
+      </div>
       <main id="main">
         <section className="hero shell" aria-labelledby="hero-title">
           <div className="hero-copy">
-            <div className="eyebrow">
+            <div className="eyebrow" data-enter="eyebrow">
               <span className="short-rule" /> JAVA & BACKEND ENGINEER
             </div>
             <h1 id="hero-title">
-              Behind every
-              <br />
-              great experience,
-              <br />
-              <span>a solid system.</span>
+              <span className="hero-line">
+                <span>Behind every</span>
+              </span>
+              <span className="hero-line">
+                <span>great experience,</span>
+              </span>
+              <span className="hero-line">
+                <span>a solid system.</span>
+              </span>
             </h1>
-            <p className="hero-description">
+            <p className="hero-description" data-enter="description">
               I’m Minh. I build reliable backends, connect complex systems, and
               make the details work at scale.
             </p>
-            <div className="hero-actions">
+            <div className="hero-actions" data-enter="actions">
               <a className="button button-primary" href="#work">
                 Explore my work <ArrowDown size={17} />
               </a>
@@ -90,21 +104,24 @@ export default function Overview() {
                 View résumé <ArrowUpRight size={17} />
               </Link>
             </div>
-            <div className="hero-location">
+            <div className="hero-location" data-enter="location">
               <span>BASED IN</span> Ho Chi Minh City, Vietnam{" "}
               <span className="location-cross">✳</span>
             </div>
           </div>
           <HeroScene />
           <div className="hero-bottom">
-            <span>BUILT WITH INTENT. FROM THE INSIDE OUT.</span>
+            <Link href="/" className="world-return">
+              <Gamepad2 size={16} /> EXPLORE MY 3D WORLD{" "}
+              <ArrowUpRight size={14} />
+            </Link>
             <a href="#work">
               SCROLL TO EXPLORE <ArrowDown size={14} />
             </a>
           </div>
         </section>
         <div className="stack-band">
-          <div className="shell stack-inner">
+          <div className="shell stack-inner" data-reveal>
             <span className="eyebrow">MY EVERYDAY TOOLKIT</span>
             <div>
               <span>Java</span>
@@ -126,7 +143,7 @@ export default function Overview() {
           id="work"
           aria-labelledby="work-title"
         >
-          <div className="section-heading">
+          <div className="section-heading" data-reveal>
             <div>
               <p className="eyebrow">
                 <span className="section-number">01</span> PERSONAL PROJECTS
@@ -141,7 +158,7 @@ export default function Overview() {
               All repositories <ArrowUpRight size={17} />
             </External>
           </div>
-          <article className="featured-project">
+          <article className="featured-project" data-reveal data-ambient>
             <div className="project-copy">
               <p className="eyebrow accent">FEATURED / PERSONAL PROJECT</p>
               <h3>
@@ -230,7 +247,7 @@ export default function Overview() {
             </div>
           </article>
           <div className="secondary-projects">
-            <article className="project-row">
+            <article className="project-row" data-reveal>
               <div className="project-index">02 /</div>
               <div>
                 <p className="eyebrow">
@@ -273,7 +290,7 @@ export default function Overview() {
           aria-labelledby="experience-title"
         >
           <div className="section shell">
-            <div className="section-heading">
+            <div className="section-heading" data-reveal>
               <div>
                 <p className="eyebrow">
                   <span className="section-number">02</span> EXPERIENCE
@@ -291,6 +308,7 @@ export default function Overview() {
                 className="experience-row"
                 id={i === 0 ? "vnpt" : "kddi"}
                 key={job.company}
+                data-reveal
               >
                 <div className="experience-time">
                   <span
@@ -305,28 +323,19 @@ export default function Overview() {
                     <p>{job.role}</p>
                   </div>
                   {job.projects.map((project) => (
-                    <details
+                    <ExperienceDisclosure
                       key={project.name}
-                      open={project.name === "VNPT Green"}
+                      name={project.name}
+                      stack={project.stack}
+                      defaultOpen={project.name === "VNPT Green"}
                     >
-                      <summary>
-                        <span>
-                          {project.name}
-                          <small>{project.stack}</small>
-                        </span>
-                        <span className="expand-icon" aria-hidden="true">
-                          +
-                        </span>
-                      </summary>
-                      <div className="experience-detail">
-                        <p>{project.description}</p>
-                        <ul>
-                          {project.points.map((p) => (
-                            <li key={p}>{p}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    </details>
+                      <p>{project.description}</p>
+                      <ul>
+                        {project.points.map((p) => (
+                          <li key={p}>{p}</li>
+                        ))}
+                      </ul>
+                    </ExperienceDisclosure>
                   ))}
                 </div>
               </article>
@@ -338,7 +347,7 @@ export default function Overview() {
           id="about"
           aria-labelledby="about-title"
         >
-          <div className="about-intro">
+          <div className="about-intro" data-reveal>
             <p className="eyebrow">
               <span className="section-number">03</span> A LITTLE ABOUT ME
             </p>
@@ -367,7 +376,7 @@ export default function Overview() {
               </p>
             </div>
           </div>
-          <div className="about-toolkit">
+          <div className="about-toolkit" data-reveal data-reveal-delay="1">
             <div className="toolkit-heading">
               <Terminal size={19} />
               <span className="eyebrow">TOOLS OF THE TRADE</span>
@@ -402,37 +411,39 @@ export default function Overview() {
           id="contact"
           aria-labelledby="contact-title"
         >
-          <p className="eyebrow">
-            <span className="section-number">04</span> GET IN TOUCH
-          </p>
-          <div className="contact-heading">
-            <h2 id="contact-title">
-              Good systems start
-              <br />
-              with a <span>conversation.</span>
-            </h2>
-            <a
-              className="contact-orb"
-              href={`mailto:${profile.email}`}
-              aria-label="Email Nguyen Ton Minh"
-            >
-              <MoveUpRight />
-            </a>
-          </div>
-          <div className="contact-links">
-            <a className="email-link" href={`mailto:${profile.email}`}>
-              {profile.email} <ArrowUpRight size={20} />
-            </a>
-            <div>
-              <External href={profile.github}>
-                <Github size={17} /> GitHub <ArrowUpRight size={14} />
-              </External>
-              <External href={profile.linkedin}>
-                <Linkedin size={17} /> LinkedIn <ArrowUpRight size={14} />
-              </External>
-              <Link href="/resume/">
-                Résumé <ArrowUpRight size={14} />
-              </Link>
+          <div className="contact-content" data-reveal>
+            <p className="eyebrow">
+              <span className="section-number">04</span> GET IN TOUCH
+            </p>
+            <div className="contact-heading">
+              <h2 id="contact-title">
+                Good systems start
+                <br />
+                with a <span>conversation.</span>
+              </h2>
+              <a
+                className="contact-orb"
+                href={`mailto:${profile.email}`}
+                aria-label="Email Nguyen Ton Minh"
+              >
+                <MoveUpRight />
+              </a>
+            </div>
+            <div className="contact-links">
+              <a className="email-link" href={`mailto:${profile.email}`}>
+                {profile.email} <ArrowUpRight size={20} />
+              </a>
+              <div>
+                <External href={profile.github}>
+                  <Github size={17} /> GitHub <ArrowUpRight size={14} />
+                </External>
+                <External href={profile.linkedin}>
+                  <Linkedin size={17} /> LinkedIn <ArrowUpRight size={14} />
+                </External>
+                <Link href="/resume/">
+                  Résumé <ArrowUpRight size={14} />
+                </Link>
+              </div>
             </div>
           </div>
         </section>
@@ -444,6 +455,6 @@ export default function Overview() {
           Back to top <ArrowRight size={14} className="rotate-up" />
         </a>
       </footer>
-    </>
+    </OverviewMotion>
   );
 }

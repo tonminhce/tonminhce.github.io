@@ -36,6 +36,8 @@ The car, buildings, trees, road furniture, packets, and signs are custom procedu
 
 The scene loads separately from the page, caps device pixel ratio, and suspends driving and rendering while paused or in a background tab. Reduced-motion preferences suppress decorative animation and use immediate transitions. Keyboard controls, touch controls, readable dialogs, and the overview route provide several ways to explore the work.
 
+The overview has its own motion system: a staged headline entrance, one-time scroll reveals, animated native experience disclosures, a reading-progress indicator, and an active section in the sticky navigation. Its custom beveled service lattice assembles on arrival, has damped drag rotation, and eases back to its home camera. Three.js loads when that scene approaches the viewport; offscreen scenes and diagram pulses pause. The header's Motion control pauses page animation, and resuming does not replay the entrance. No scroll interception or animation framework is used.
+
 ## Run locally
 
 Node.js 22+ and Yarn Classic 1.22.22:
@@ -63,6 +65,9 @@ Next.js exports static HTML, CSS, and JavaScript to `out/`. GitHub Actions deplo
 - `src/app/world.css`: game interface, responsive layout, and transition styles.
 - `src/app/overview/page.tsx`: readable portfolio at `/overview/`.
 - `src/components/hero-scene.tsx`: interactive Three.js service lattice on the overview route.
+- `src/components/overview-motion.tsx`: motion preference, section reveals, reading progress, and active navigation.
+- `src/components/experience-disclosure.tsx`: interruptible height transitions with native details/summary behavior.
+- `src/app/overview/overview.css`: overview motion, hover states, and responsive refinements.
 - `src/app/globals.css`: shared, overview, and responsive/print styles.
 - `src/app/resume/page.tsx`: résumé at `/resume/`, with Print / Save PDF.
 
