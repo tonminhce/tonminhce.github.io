@@ -18,7 +18,6 @@ import {
   Compass,
   Github,
   Linkedin,
-  X,
   Navigation,
   Mail,
   HelpCircle,
@@ -40,6 +39,8 @@ import {
 import { experience, certifications, profile } from "@/data/portfolio";
 import type { DrivingWorld } from "@/lib/driving-world";
 import type { DriveInput } from "@/lib/driving-physics";
+import { StopIllustration } from "@/components/stop-illustration";
+import { ExperienceDisclosure } from "@/components/experience-disclosure";
 
 export function DrivingPortfolio() {
   const container = useRef<HTMLDivElement>(null);
@@ -67,6 +68,7 @@ export function DrivingPortfolio() {
   const toastTimer = useRef<ReturnType<typeof setTimeout>>();
   const [entering, setEntering] = useState<StopId | null>(null);
   const enteringRef = useRef<StopId | null>(null);
+  const arrivalSkip = useRef<HTMLButtonElement>(null);
   const [lastPanel, setLastPanel] = useState<typeof panel>(null);
   const opener = useRef<HTMLElement | null>(null);
 
@@ -189,6 +191,17 @@ export function DrivingPortfolio() {
       status !== "ready" || paused || panel !== null || entering !== null,
     );
   }, [paused, panel, status, entering]);
+  useEffect(() => {
+    const page = container.current?.closest("main");
+    page
+      ?.querySelectorAll<HTMLElement>(
+        ".world-header, .world-intro, .world-minimap, .world-footer, .touch-drive, .world-canvas",
+      )
+      .forEach((element) => {
+        element.inert = entering !== null;
+      });
+    if (entering) arrivalSkip.current?.focus({ preventScroll: true });
+  }, [entering]);
   function openPanel(next: typeof panel) {
     if (enteringRef.current) return;
     opener.current =
@@ -215,11 +228,14 @@ export function DrivingPortfolio() {
   const active = stops.find((s) => s.id === displayPanel);
   const arriving = stops.find((s) => s.id === entering);
   const count = achievements.filter((a) => a.goal(progress)).length;
+  const nextStop = [stops[1], stops[0], ...stops.slice(2)].find(
+    (stop) => !progress.visited.includes(stop.id),
+  );
   return (
     <main
       className={`driving-page world-${status} ${
         entering ? "is-entering" : ""
-      } ${panel ? "has-panel" : ""}`}
+      } ${panel ? "has-panel" : ""} ${intro ? "is-intro" : "is-exploring"}`}
       style={
         {
           "--stop-accent": arriving?.color || active?.color || "#d36a42",
@@ -234,12 +250,12 @@ export function DrivingPortfolio() {
             m<span>.</span>
           </span>
           <span>
-            MINH’S WORLD<small>JAVA & BACKEND ENGINEER</small>
+            NGUYEN TON MINH<small>JAVA & BACKEND ENGINEER</small>
           </span>
         </Link>
         <div className="world-header-actions">
           <Link href="/overview/" className="world-text-link">
-            Read portfolio <ArrowUpRight size={15} />
+            Portfolio <ArrowUpRight size={16} />
           </Link>
           <button
             className="world-icon-button"
@@ -263,48 +279,75 @@ export function DrivingPortfolio() {
         </div>
       </header>
       <div className={`world-intro ${intro ? "" : "world-intro-compact"}`}>
-        <p className="world-eyebrow">A SMALL WORLD, BUILT BY MINH</p>
-        <h1>
-          Take the
-          <br />
-          <span>scenic route.</span>
-        </h1>
-        <p>
-          Drive around. Get to know my work.
-          <br />
-          Find a few surprises along the way.
+        <p className="world-eyebrow">
+          <span /> WELCOME TO MY LITTLE CORNER
         </p>
-        <div className="world-intro-rule" />
-        <span className="world-place">HO CHI MINH CITY, VIETNAM ↗</span>
+        <h1>
+          Serious systems.
+          <br />
+          <span>A playful world.</span>
+        </h1>
+        <p className="world-intro-copy">
+          I’m Minh. I build backends with Java & Go. Hop in and discover the
+          work, the ideas, and the person behind the code.
+        </p>
+        {intro ? (
+          <div className="world-intro-actions">
+            <button
+              className="world-primary"
+              disabled={status !== "ready"}
+              onClick={() => {
+                setIntro(false);
+                container.current?.querySelector("canvas")?.focus();
+              }}
+            >
+              Let’s explore <ArrowRight size={17} />
+            </button>
+            <span>5 places. Your own pace.</span>
+          </div>
+        ) : (
+          <button className="world-next-stop" onClick={() => openPanel("map")}>
+            <span className="next-stop-icon">
+              <Compass size={19} />
+            </span>
+            <span>
+              <small>
+                {nextStop
+                  ? "YOUR NEXT DISCOVERY"
+                  : "THE WHOLE WORLD, DISCOVERED"}
+              </small>
+              <strong>{nextStop?.title || "Take another look around"}</strong>
+            </span>
+            <ArrowUpRight size={17} />
+          </button>
+        )}
+        <span className="world-place">
+          10.82° N, 106.63° E <span>·</span> HO CHI MINH CITY
+        </span>
       </div>
       <div className="world-location">
-        <span className="location-dot" />{" "}
-        {near ? near.title : "EXPLORING THE CAMPUS"} <small>WORLD 01</small>
+        <span className="location-dot" /> {near ? near.title : "MINH’S WORLD"}{" "}
+        <small>EXPLORE / 01</small>
       </div>
-      <aside className="world-minimap" aria-label="Campus navigation">
-        <div className="minimap-heading">
+      <button
+        className="world-minimap"
+        aria-label={`Open campus map, ${progress.visited.length} of 5 places discovered`}
+        onClick={() => openPanel("map")}
+      >
+        <span className="minimap-heading">
           <Compass size={14} />
-          <span>THE NEIGHBORHOOD</span>
-          <button
-            aria-label="Expand campus map"
-            onClick={() => openPanel("map")}
-          >
-            <ArrowUpRight size={15} />
-          </button>
-        </div>
-        <div className="minimap-plan">
-          <div className="map-road map-road-main" />
-          <div className="map-road map-road-top" />
-          <div className="map-road map-road-bottom" />
-          <div className="map-road map-road-left" />
-          <div className="map-road map-road-right" />
+          <span>FIELD MAP</span>
+          <ArrowUpRight size={15} />
+        </span>
+        <span className="minimap-plan" aria-hidden="true">
+          <span className="map-road map-road-main" />
+          <span className="map-road map-road-top" />
+          <span className="map-road map-road-bottom" />
+          <span className="map-road map-road-left" />
+          <span className="map-road map-road-right" />
           {stops.map((s) => (
-            <button
+            <span
               key={s.id}
-              disabled={status !== "ready" || !!entering}
-              title={`Travel to ${s.title}`}
-              aria-label={`Travel to ${s.title}`}
-              onClick={() => travel(s.id)}
               className={`map-stop ${
                 progress.visited.includes(s.id) ? "visited" : ""
               }`}
@@ -315,7 +358,7 @@ export function DrivingPortfolio() {
               }}
             >
               {progress.visited.includes(s.id) ? <Check size={10} /> : s.number}
-            </button>
+            </span>
           ))}
           <span
             className="map-car"
@@ -329,9 +372,11 @@ export function DrivingPortfolio() {
           >
             <Navigation size={12} fill="currentColor" />
           </span>
-        </div>
-        <p>{progress.visited.length} of 5 places discovered</p>
-      </aside>
+        </span>
+        <span className="minimap-caption">
+          <strong>{progress.visited.length} / 5</strong> places discovered
+        </span>
+      </button>
       {status === "loading" && (
         <div className="world-loading">
           <span className="loading-wheel" />
@@ -354,21 +399,6 @@ export function DrivingPortfolio() {
           <Link className="world-primary" href="/overview/">
             Open the portfolio <ArrowUpRight size={16} />
           </Link>
-        </div>
-      )}
-      {status === "ready" && intro && !panel && !paused && !entering && (
-        <div className="world-welcome">
-          <span className="welcome-icon">↗</span>
-          <div>
-            <strong>Your ride is ready.</strong>
-            <p>Follow the gold packets. Park in a colored circle to explore.</p>
-          </div>
-          <button
-            aria-label="Dismiss driving introduction"
-            onClick={() => setIntro(false)}
-          >
-            <X size={16} />
-          </button>
         </div>
       )}
       {near && !panel && !paused && !entering && status === "ready" && (
@@ -486,6 +516,7 @@ export function DrivingPortfolio() {
               }
             }}
             onKeyUp={() => hold(b.key, false)}
+            onBlur={() => hold(b.key, false)}
           >
             {b.icon}
           </button>
@@ -503,6 +534,7 @@ export function DrivingPortfolio() {
             <span className="arrival-progress" />
           </div>
           <button
+            ref={arrivalSkip}
             className="arrival-skip"
             onClick={() => world.current?.finishEntry()}
           >
@@ -538,122 +570,204 @@ export function DrivingPortfolio() {
             else container.current?.querySelector("canvas")?.focus();
           }}
         >
-          <div className="dialog-topline">
-            <span>
-              {active
-                ? `STOP ${active.number} / ${active.label}`
-                : displayPanel === "map"
-                  ? "YOUR FIELD GUIDE"
-                  : displayPanel === "help"
-                    ? "READY, SET, EXPLORE"
-                    : "A FEW LITTLE MILESTONES"}
-            </span>
-            <span>MINH’S WORLD</span>
-          </div>
-          <DialogTitle className="world-dialog-title">
-            {active?.title ||
-              (displayPanel === "map"
-                ? "Pick your next stop."
-                : displayPanel === "help"
-                  ? "Make yourself at home."
-                  : "A good day for exploring.")}
-          </DialogTitle>
-          <DialogDescription className="world-dialog-description">
-            {active?.subtitle ||
-              (displayPanel === "map"
-                ? "Drive there yourself, or hop straight to a destination."
-                : displayPanel === "help"
-                  ? "There’s no timer. Just a little world to get to know me."
-                  : "Your discoveries are saved in this browser. Keep driving to find them all.")}
-          </DialogDescription>
-          {displayPanel === "map" && (
-            <div className="world-stop-list">
-              {stops.map((s) => (
-                <button
-                  key={s.id}
-                  disabled={status !== "ready"}
-                  onClick={() => travel(s.id)}
-                >
-                  <span style={{ background: s.color }}>{s.number}</span>
-                  <div>
-                    <strong>{s.title}</strong>
-                    <small>{s.subtitle}</small>
-                  </div>
-                  {progress.visited.includes(s.id) ? (
-                    <Check size={18} />
-                  ) : (
-                    <ArrowUpRight size={18} />
-                  )}
-                </button>
-              ))}
+          <div className="world-dialog-scroll">
+            <div className="dialog-topline">
+              <span>
+                {active
+                  ? `STOP ${active.number} / ${active.label}`
+                  : displayPanel === "map"
+                    ? "YOUR FIELD GUIDE"
+                    : displayPanel === "help"
+                      ? "READY, SET, EXPLORE"
+                      : "A FEW LITTLE MILESTONES"}
+              </span>
+              <span>MINH’S WORLD</span>
             </div>
-          )}
-          {displayPanel === "achievements" && (
-            <div className="achievement-list">
-              {achievements.map((a) => (
-                <div className={a.goal(progress) ? "unlocked" : ""} key={a.id}>
-                  <span>
-                    {a.goal(progress) ? (
-                      <Trophy size={22} />
-                    ) : (
-                      <LockKeyhole size={20} />
-                    )}
+            <div
+              className={`world-dialog-masthead ${
+                active ? "has-illustration" : ""
+              }`}
+            >
+              <div>
+                <DialogTitle className="world-dialog-title">
+                  {active?.title ||
+                    (displayPanel === "map"
+                      ? "Pick your next stop."
+                      : displayPanel === "help"
+                        ? "Make yourself at home."
+                        : "A good day for exploring.")}
+                </DialogTitle>
+                <DialogDescription className="world-dialog-description">
+                  {active?.subtitle ||
+                    (displayPanel === "map"
+                      ? "Drive there yourself, or hop straight to a destination."
+                      : displayPanel === "help"
+                        ? "There’s no timer. Just a little world to get to know me."
+                        : "Your discoveries are saved in this browser. Keep driving to find them all.")}
+                </DialogDescription>
+              </div>
+              {active && (
+                <StopIllustration
+                  id={active.id}
+                  className="stop-masthead-art"
+                />
+              )}
+            </div>
+            {displayPanel === "map" && (
+              <div className="world-stop-list">
+                {stops.map((s) => (
+                  <button
+                    key={s.id}
+                    className={
+                      progress.visited.includes(s.id) ? "is-discovered" : ""
+                    }
+                    style={{ "--card-accent": s.color } as CSSProperties}
+                    disabled={status !== "ready"}
+                    onClick={() => travel(s.id)}
+                  >
+                    <StopIllustration id={s.id} className="stop-card-art" />
+                    <div className="stop-card-copy">
+                      <span className="stop-card-number">
+                        STOP {s.number} <span> / {s.label}</span>
+                      </span>
+                      <strong>{s.title}</strong>
+                      <small>{s.subtitle}</small>
+                      <span className="stop-card-status">
+                        {progress.visited.includes(s.id) ? (
+                          <>
+                            <Check size={12} /> Discovered
+                          </>
+                        ) : (
+                          <>
+                            Let’s go <ArrowRight size={12} />
+                          </>
+                        )}
+                      </span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+            {displayPanel === "achievements" && (
+              <>
+                <div className="explorer-pass">
+                  <span className="explorer-pass-badge">
+                    <Trophy size={30} strokeWidth={1.5} />
                   </span>
                   <div>
-                    <h3>{a.title}</h3>
-                    <p>{a.description}</p>
+                    <span>YOUR EXPLORER PASS</span>
+                    <strong>
+                      {count === achievements.length
+                        ? "Every corner. Every story."
+                        : "Good things take a little curiosity."}
+                    </strong>
+                    <div
+                      className="explorer-pass-stamps"
+                      aria-label={`${count} of 5 achievements unlocked`}
+                    >
+                      {achievements.map((a) => (
+                        <span
+                          key={a.id}
+                          className={a.goal(progress) ? "is-earned" : ""}
+                        >
+                          {a.goal(progress) ? <Check size={12} /> : "·"}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  {a.goal(progress) && <Check size={17} />}
+                  <span className="explorer-pass-count">
+                    {count}
+                    <small>/ 05</small>
+                  </span>
                 </div>
-              ))}
-              <div className="achievement-progress">
-                <span>{progress.visited.length}/5 stops</span>
-                <span>{progress.collected.length}/12 packets</span>
-                <span>{Math.floor(progress.distance)}/500 m</span>
-              </div>
-            </div>
-          )}
-          {displayPanel === "help" && (
-            <div className="world-help">
-              <div>
-                <kbd>W A S D</kbd>
+                <div className="achievement-list">
+                  {achievements.map((a) => (
+                    <div
+                      className={a.goal(progress) ? "unlocked" : ""}
+                      key={a.id}
+                    >
+                      <span>
+                        {a.goal(progress) ? (
+                          <Trophy size={22} />
+                        ) : (
+                          <LockKeyhole size={20} />
+                        )}
+                      </span>
+                      <div>
+                        <h3>{a.title}</h3>
+                        <p>{a.description}</p>
+                        <progress
+                          className="achievement-meter"
+                          max={1}
+                          value={
+                            a.id === "hello"
+                              ? Math.min(progress.distance / 10, 1)
+                              : a.id === "connection"
+                                ? Math.min(progress.visited.length, 1)
+                                : a.id === "tour"
+                                  ? progress.visited.length / 5
+                                  : a.id === "packets"
+                                    ? progress.collected.length / 12
+                                    : Math.min(progress.distance / 500, 1)
+                          }
+                          aria-label={`${a.title} progress`}
+                        />
+                      </div>
+                      {a.goal(progress) && <Check size={17} />}
+                    </div>
+                  ))}
+                  <div className="achievement-progress">
+                    <span>{progress.visited.length}/5 stops</span>
+                    <span>{progress.collected.length}/12 packets</span>
+                    <span>{Math.floor(progress.distance)}/500 m</span>
+                  </div>
+                </div>
+              </>
+            )}
+            {displayPanel === "help" && (
+              <div className="world-help">
+                <div>
+                  <kbd>W A S D</kbd>
+                  <p>
+                    Drive and steer. Arrow keys work too.
+                    <br />
+                    On a phone, hold the on-screen arrows.
+                  </p>
+                </div>
+                <div>
+                  <kbd>SPACE</kbd>
+                  <p>Brake. Reverse with S or the down arrow.</p>
+                </div>
+                <div>
+                  <kbd>E / ENTER</kbd>
+                  <p>
+                    Explore a stop when you’re parked inside its colored ring.
+                    You can also tap the arrival card.
+                  </p>
+                </div>
+                <div>
+                  <kbd>R</kbd>
+                  <p>Back to the starting point if you need a fresh start.</p>
+                </div>
                 <p>
-                  Drive and steer. Arrow keys work too.
-                  <br />
-                  On a phone, hold the on-screen arrows.
+                  Golden packets unlock a collector achievement. The map lets
+                  you jump between stops. Prefer a quick read?{" "}
+                  <Link href="/overview/">
+                    The full portfolio is right here.
+                  </Link>
                 </p>
               </div>
-              <div>
-                <kbd>SPACE</kbd>
-                <p>Brake. Reverse with S or the down arrow.</p>
-              </div>
-              <div>
-                <kbd>E / ENTER</kbd>
-                <p>
-                  Explore a stop when you’re parked inside its colored ring. You
-                  can also tap the arrival card.
-                </p>
-              </div>
-              <div>
-                <kbd>R</kbd>
-                <p>Back to the starting point if you need a fresh start.</p>
-              </div>
-              <p>
-                Golden packets unlock a collector achievement. The map lets you
-                jump between stops. Prefer a quick read?{" "}
-                <Link href="/overview/">The full portfolio is right here.</Link>
-              </p>
-            </div>
-          )}
-          {active && <StopContent id={active.id} />}
-          {active && (
-            <button
-              className="world-primary continue-driving"
-              onClick={closePanel}
-            >
-              Back to the road <ArrowRight size={16} />
-            </button>
-          )}
+            )}
+            {active && <StopContent id={active.id} />}
+            {active && (
+              <button
+                className="world-primary continue-driving"
+                onClick={closePanel}
+              >
+                Back to the road <ArrowRight size={16} />
+              </button>
+            )}
+          </div>
         </DialogContent>
       </Dialog>
     </main>
@@ -712,19 +826,19 @@ function StopContent({ id }: { id: StopId }) {
             <h3>{job.company}</h3>
             <p>{job.role}</p>
             {job.projects.map((p) => (
-              <details key={p.name} open={p.name === "AI-Driven Platform"}>
-                <summary>
-                  {p.name}
-                  <span>+</span>
-                </summary>
+              <ExperienceDisclosure
+                key={p.name}
+                name={p.name}
+                stack={p.stack}
+                defaultOpen={p.name === "AI-Driven Platform"}
+              >
                 <p>{p.description}</p>
-                <small>{p.stack}</small>
                 <ul>
                   {p.points.map((point) => (
                     <li key={point}>{point}</li>
                   ))}
                 </ul>
-              </details>
+              </ExperienceDisclosure>
             ))}
           </div>
         ))}

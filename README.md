@@ -34,6 +34,8 @@ For a direct read, visit **`/overview/`**. The printable résumé is at **`/resu
 
 The car, buildings, trees, road furniture, packets, and signs are custom procedural Three.js models built from geometry and canvas-drawn labels. There are **no downloaded or externally hosted 3D models**. The neighborhood uses an orthographic camera, soft shadows, and a warm miniature-world palette.
 
+The interface follows a field-guide style: cream paper, forest green controls, a terracotta serif accent, and five original isometric SVG destination illustrations. The map uses large illustrated cards; an explorer pass shows achievement progress. The portfolio link stays visible on phones, touch controls support coarse-pointer tablets, and short landscape layouts leave space around the car. Dialog close controls remain visible while reading long content. Cinematic arrivals move keyboard focus to the skip control, and project disclosures animate their height while preserving native keyboard behavior.
+
 The scene loads separately from the page, caps device pixel ratio, and suspends driving and rendering while paused or in a background tab. Reduced-motion preferences suppress decorative animation and use immediate transitions. Keyboard controls, touch controls, readable dialogs, and the overview route provide several ways to explore the work.
 
 The overview has its own motion system: a staged headline entrance, one-time scroll reveals, animated native experience disclosures, a reading-progress indicator, and an active section in the sticky navigation. Its custom beveled service lattice assembles on arrival, has damped drag rotation, and eases back to its home camera. Three.js loads when that scene approaches the viewport; offscreen scenes and diagram pulses pause. The header's Motion control pauses page animation, and resuming does not replay the entrance. No scroll interception or animation framework is used.
@@ -63,6 +65,8 @@ Next.js exports static HTML, CSS, and JavaScript to `out/`. GitHub Actions deplo
 - `src/lib/driving-world.ts`: procedural models, rendering, camera transitions, and world interactions.
 - `src/lib/driving-physics.ts`: acceleration, steering, braking, collisions, and travel distance.
 - `src/app/world.css`: game interface, responsive layout, and transition styles.
+- `src/app/world-ui.css`: field-guide visual design, dialog layouts, touch refinements, and reduced-motion overrides.
+- `src/components/stop-illustration.tsx`: five hand-authored isometric SVG destination thumbnails.
 - `src/app/overview/page.tsx`: readable portfolio at `/overview/`.
 - `src/components/hero-scene.tsx`: interactive Three.js service lattice on the overview route.
 - `src/components/overview-motion.tsx`: motion preference, section reveals, reading progress, and active navigation.
