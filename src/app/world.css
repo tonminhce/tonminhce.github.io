@@ -482,7 +482,7 @@ kbd {
   font-size: 11px;
   margin-left: auto;
 }
-.world-loading,
+.world-status-card,
 .world-pause-panel {
   position: absolute;
   top: 50%;
@@ -497,17 +497,17 @@ kbd {
   width: min(460px, calc(100% - 40px));
   z-index: 4;
 }
-.world-loading h2,
+.world-status-card h2,
 .world-pause-panel h2 {
   font-size: 26px;
   margin: 17px 0 13px;
 }
-.world-loading p {
+.world-status-card p {
   font-size: 14px;
   line-height: 1.7;
   color: #7c886f;
 }
-.world-loading > a {
+.world-status-card > a {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -515,7 +515,7 @@ kbd {
   font-size: 12px;
   color: #b2633d;
 }
-.world-loading > svg,
+.world-status-card > svg,
 .world-pause-panel > svg {
   margin-inline: auto;
   color: #c87849;
@@ -1292,13 +1292,13 @@ kbd {
   .world-help p {
     font-size: 12px;
   }
-  .world-loading h2 {
+  .world-status-card h2 {
     font-size: 25px;
   }
-  .world-loading {
+  .world-status-card {
     padding: 27px;
   }
-  .world-loading p {
+  .world-status-card p {
     font-size: 13px;
   }
 }

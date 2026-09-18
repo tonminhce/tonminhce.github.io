@@ -121,7 +121,6 @@ export function DrivingPortfolio() {
     achievements.forEach((a) => {
       if (a.goal(saved)) earned.current.add(a.id);
     });
-    if (saved.distance > 10) setIntro(false);
     import("@/lib/driving-world")
       .then(({ DrivingWorld }) => {
         if (cancelled || !container.current) return;
@@ -136,7 +135,9 @@ export function DrivingPortfolio() {
                     ...progressRef.current,
                     distance: state.distance,
                   });
-                if (state.distance > 12) setIntro(false);
+                // Only this visit's driving can dismiss the introduction.
+                // Saved lifetime distance must not change the initial layout.
+                if (state.distance - saved.distance > 12) setIntro(false);
               },
               onPacket(id) {
                 if (!progressRef.current.collected.includes(id))
@@ -377,18 +378,43 @@ export function DrivingPortfolio() {
           <strong>{progress.visited.length} / 5</strong> places discovered
         </span>
       </button>
-      {status === "loading" && (
-        <div className="world-loading">
-          <span className="loading-wheel" />
-          <h2>Warming up the engine.</h2>
-          <p>A little world is coming together…</p>
-          <Link href="/overview/">
-            Read the portfolio while you wait <ArrowUpRight size={14} />
-          </Link>
+      {status !== "failed" && (
+        <div className="world-startup" aria-hidden={status !== "loading"}>
+          <div className="startup-content" role="status" aria-live="polite">
+            <div className="startup-village" aria-hidden="true">
+              <span className="startup-orbit" />
+              <StopIllustration
+                id="rental"
+                className="startup-art startup-art-left"
+              />
+              <StopIllustration
+                id="commerce"
+                className="startup-art startup-art-center"
+              />
+              <StopIllustration
+                id="experience"
+                className="startup-art startup-art-right"
+              />
+            </div>
+            <span className="startup-eyebrow">
+              A SMALL WORLD, BUILT BY MINH
+            </span>
+            <h2>
+              A little world.
+              <br />
+              <em>Coming to life.</em>
+            </h2>
+            <p>Getting the roads ready for your next discovery.</p>
+            <div className="startup-track" aria-hidden="true">
+              <span />
+            </div>
+            <span className="startup-caption">PREPARING YOUR RIDE</span>
+          </div>
+          <span className="startup-footnote">FIVE PLACES. YOUR OWN PACE.</span>
         </div>
       )}
       {status === "failed" && (
-        <div className="world-loading">
+        <div className="world-status-card">
           <Compass size={32} />
           <h2>Let’s take another route.</h2>
           <p>

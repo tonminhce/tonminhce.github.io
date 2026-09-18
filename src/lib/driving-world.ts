@@ -139,8 +139,15 @@ export class DrivingWorld {
     this.createCar();
     this.createPackets();
     this.createEffects();
-    this.camera.position.set(28, 40, 36);
-    this.camera.lookAt(0, 0, 0);
+    // The first framebuffer uses the same framing as normal driving.
+    this.vehicle.position.set(this.car.x, 0, this.car.z);
+    this.vehicle.rotation.y = this.car.heading;
+    this.cameraTarget.set(this.car.x * 0.7, 0, this.car.z * 0.7 - 2);
+    this.camera.position
+      .copy(this.cameraTarget)
+      .add(new THREE.Vector3(30, 40, 34));
+    this.camera.zoom = 1;
+    this.camera.lookAt(this.cameraTarget);
     this.resizeObserver = new ResizeObserver(this.resize);
     this.resizeObserver.observe(container);
     this.resize();
@@ -157,19 +164,6 @@ export class DrivingWorld {
       this.worldPointerDown,
     );
     this.renderer.domElement.addEventListener("pointerup", this.worldPointerUp);
-    this.cameraTarget.set(this.car.x * 0.7, 0, this.car.z * 0.7 - 2);
-    this.camera.position
-      .copy(this.cameraTarget)
-      .add(new THREE.Vector3(35, 47, 40));
-    this.camera.zoom = this.reducedMotion.matches ? 1 : 0.83;
-    this.camera.updateProjectionMatrix();
-    this.camera.lookAt(this.cameraTarget);
-    this.tweenCamera(
-      this.cameraTarget.clone(),
-      new THREE.Vector3(30, 40, 34),
-      1,
-      1.4,
-    );
     this.start();
   }
   private mat(color: string | number, roughness = 0.85) {
@@ -901,7 +895,7 @@ export class DrivingWorld {
     const w = this.container.clientWidth,
       h = this.container.clientHeight,
       aspect = w / Math.max(h, 1);
-    const span = aspect < 0.85 ? 25 : aspect < 1.25 ? 27 : 25;
+    const span = 25;
     this.camera.left = -span * aspect;
     this.camera.right = span * aspect;
     this.camera.top = span;
