@@ -5,11 +5,13 @@ import { useOverviewMotion } from "./overview-motion";
 
 /** Keep native details semantics and the no-JavaScript disclosure fallback. */
 export function ExperienceDisclosure({
+  id,
   name,
   stack,
   defaultOpen = false,
   children,
 }: {
+  id?: string;
   name: string;
   stack: string;
   defaultOpen?: boolean;
@@ -36,6 +38,30 @@ export function ExperienceDisclosure({
   }, [paused, finish]);
 
   useEffect(() => {
+    if (!id) return;
+    const revealLinkedContent = () => {
+      if (location.hash !== `#${id}`) return;
+      intendedOpen.current = true;
+      finish();
+    };
+    const onLink = (event: MouseEvent) => {
+      const link =
+        event.target instanceof Element ? event.target.closest("a") : null;
+      if (link?.getAttribute("href") === `#${id}`) {
+        intendedOpen.current = true;
+        finish();
+      }
+    };
+    revealLinkedContent();
+    window.addEventListener("hashchange", revealLinkedContent);
+    document.addEventListener("click", onLink);
+    return () => {
+      window.removeEventListener("hashchange", revealLinkedContent);
+      document.removeEventListener("click", onLink);
+    };
+  }, [id, finish]);
+
+  useEffect(() => {
     window.addEventListener("resize", finish);
     return () => {
       window.removeEventListener("resize", finish);
@@ -45,6 +71,7 @@ export function ExperienceDisclosure({
 
   return (
     <details
+      id={id}
       ref={ref}
       open={defaultOpen}
       className="experience-disclosure"

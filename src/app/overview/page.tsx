@@ -19,6 +19,8 @@ import {
 import { HeroScene } from "@/components/hero-scene";
 import { OverviewMotion, MotionToggle } from "@/components/overview-motion";
 import { ExperienceDisclosure } from "@/components/experience-disclosure";
+import { ProfessionalSpotlight } from "@/components/professional-spotlight";
+import { CopyEmail } from "@/components/copy-email";
 import "./overview.css";
 import {
   experience,
@@ -54,7 +56,12 @@ export default function Overview() {
       <div className="overview-header">
         <div className="reading-progress" aria-hidden="true" />
         <header className="site-header shell">
-          <Link href="/" className="wordmark" aria-label="Ton Minh, home">
+          <Link
+            href="/"
+            scroll={false}
+            className="wordmark"
+            aria-label="Ton Minh, home"
+          >
             <span className="brand-symbol">
               m<span>.</span>
             </span>
@@ -71,7 +78,19 @@ export default function Overview() {
                 Let’s talk <ArrowUpRight size={15} />
               </a>
             </nav>
-            <MotionToggle />
+            <div className="overview-mode-controls">
+              <Link
+                href="/"
+                scroll={false}
+                className="world-mode-link"
+                aria-label="Explore the 3D world"
+              >
+                <Gamepad2 size={16} />
+                <span>3D world</span>
+                <ArrowUpRight size={13} />
+              </Link>
+              <MotionToggle />
+            </div>
           </div>
         </header>
       </div>
@@ -111,7 +130,7 @@ export default function Overview() {
           </div>
           <HeroScene />
           <div className="hero-bottom">
-            <Link href="/" className="world-return">
+            <Link href="/" scroll={false} className="world-return">
               <Gamepad2 size={16} /> EXPLORE MY 3D WORLD{" "}
               <ArrowUpRight size={14} />
             </Link>
@@ -138,12 +157,8 @@ export default function Overview() {
             </div>
           </div>
         </div>
-        <section
-          className="section shell"
-          id="work"
-          aria-labelledby="work-title"
-        >
-          <div className="section-heading" data-reveal>
+        <section className="section shell" aria-labelledby="work-title">
+          <div className="section-heading" id="work" data-reveal>
             <div>
               <p className="eyebrow">
                 <span className="section-number">01</span> PERSONAL PROJECTS
@@ -286,11 +301,10 @@ export default function Overview() {
         </section>
         <section
           className="experience-section"
-          id="experience"
           aria-labelledby="experience-title"
         >
           <div className="section shell">
-            <div className="section-heading" data-reveal>
+            <div className="section-heading" id="experience" data-reveal>
               <div>
                 <p className="eyebrow">
                   <span className="section-number">02</span> EXPERIENCE
@@ -303,6 +317,7 @@ export default function Overview() {
                 The work behind the results.
               </p>
             </div>
+            <ProfessionalSpotlight />
             {experience.map((job, i) => (
               <article
                 className="experience-row"
@@ -324,10 +339,15 @@ export default function Overview() {
                   </div>
                   {job.projects.map((project) => (
                     <ExperienceDisclosure
+                      id={
+                        project.name === "AI-Driven Platform"
+                          ? "vnpt-ai"
+                          : undefined
+                      }
                       key={project.name}
                       name={project.name}
                       stack={project.stack}
-                      defaultOpen={project.name === "VNPT Green"}
+                      defaultOpen={project.name === "AI-Driven Platform"}
                     >
                       <p>{project.description}</p>
                       <ul>
@@ -344,10 +364,9 @@ export default function Overview() {
         </section>
         <section
           className="section shell about-section"
-          id="about"
           aria-labelledby="about-title"
         >
-          <div className="about-intro" data-reveal>
+          <div className="about-intro" id="about" data-reveal>
             <p className="eyebrow">
               <span className="section-number">03</span> A LITTLE ABOUT ME
             </p>
@@ -408,10 +427,9 @@ export default function Overview() {
         </section>
         <section
           className="contact-section shell"
-          id="contact"
           aria-labelledby="contact-title"
         >
-          <div className="contact-content" data-reveal>
+          <div className="contact-content" id="contact" data-reveal>
             <p className="eyebrow">
               <span className="section-number">04</span> GET IN TOUCH
             </p>
@@ -430,9 +448,12 @@ export default function Overview() {
               </a>
             </div>
             <div className="contact-links">
-              <a className="email-link" href={`mailto:${profile.email}`}>
-                {profile.email} <ArrowUpRight size={20} />
-              </a>
+              <div className="contact-email-actions">
+                <a className="email-link" href={`mailto:${profile.email}`}>
+                  {profile.email} <ArrowUpRight size={20} />
+                </a>
+                <CopyEmail />
+              </div>
               <div>
                 <External href={profile.github}>
                   <Github size={17} /> GitHub <ArrowUpRight size={14} />

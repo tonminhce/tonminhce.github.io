@@ -41,6 +41,7 @@ import type { DrivingWorld } from "@/lib/driving-world";
 import type { DriveInput } from "@/lib/driving-physics";
 import { StopIllustration } from "@/components/stop-illustration";
 import { ExperienceDisclosure } from "@/components/experience-disclosure";
+import { CopyEmail } from "@/components/copy-email";
 
 export function DrivingPortfolio() {
   const container = useRef<HTMLDivElement>(null);
@@ -947,10 +948,13 @@ function StopContent({ id }: { id: StopId }) {
         Want to talk about backend engineering, an interesting project, or
         working together? Say hello.
       </p>
-      <a className="world-primary" href={`mailto:${profile.email}`}>
-        <Mail size={17} />
-        {profile.email}
-      </a>
+      <div className="stop-email-actions">
+        <a className="world-primary" href={`mailto:${profile.email}`}>
+          <Mail size={17} />
+          {profile.email}
+        </a>
+        <CopyEmail />
+      </div>
       <div className="contact-stop-links">
         <a href={profile.github} target="_blank" rel="noreferrer">
           <Github size={18} /> GitHub <ArrowUpRight size={14} />

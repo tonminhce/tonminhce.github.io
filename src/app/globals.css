@@ -961,6 +961,62 @@ details[open] .expand-icon {
 .contact-links a:hover {
   color: var(--accent);
 }
+.copy-email-control {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.copy-email {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 44px;
+  min-width: 128px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    color 200ms,
+    border-color 200ms,
+    background 200ms;
+}
+.copy-email:hover {
+  color: var(--ink);
+  border-color: #738077;
+  background: #ffffff05;
+}
+.copy-email-control[data-state="copied"] .copy-email {
+  color: #c6dcae;
+  border-color: #70885d;
+  background: #263020;
+}
+.copy-email-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.copy-email-control[data-state="failed"] .copy-email-status {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 8px 0 0;
+  clip-path: none;
+  white-space: normal;
+  max-width: 240px;
+  font-size: 12px;
+  line-height: 1.6;
+}
 .site-footer {
   display: flex;
   justify-content: space-between;

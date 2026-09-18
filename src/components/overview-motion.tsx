@@ -53,7 +53,7 @@ export function OverviewMotion({ children }: { children: React.ReactNode }) {
           observer.unobserve(entry.target);
         });
       },
-      { rootMargin: "0px 0px -32px 0px", threshold: 0 },
+      { rootMargin: "0px 0px 120px 0px", threshold: 0 },
     );
     targets.forEach((element) => {
       // Content already on screen is never hidden after hydration.

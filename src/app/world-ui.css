@@ -625,6 +625,26 @@
 .continue-driving {
   justify-self: start;
 }
+.stop-email-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 22px;
+}
+.world-dialog .copy-email {
+  color: #4c6340;
+  border-color: #65784c40;
+}
+.world-dialog .copy-email:hover {
+  background: #e8eddc;
+  border-color: #7f9667;
+}
+.world-dialog .copy-email-control[data-state="copied"] .copy-email {
+  color: #3d592b;
+  background: #e3edd7;
+  border-color: #7f9667;
+}
 .explorer-pass {
   display: flex;
   align-items: center;
