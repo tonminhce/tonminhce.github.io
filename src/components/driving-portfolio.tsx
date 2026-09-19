@@ -825,7 +825,7 @@ export function DrivingPortfolio() {
 function StopContent({ id }: { id: StopId }) {
   if (id === "commerce")
     return (
-      <div className="stop-content">
+      <div className="stop-content commerce-content">
         <span className="stop-category">PERSONAL PROJECT</span>
         <h3>Commerce, decoupled.</h3>
         <p>
@@ -833,20 +833,20 @@ function StopContent({ id }: { id: StopId }) {
           Fourteen services connect through Kafka, with isolated databases and
           explicit domain boundaries.
         </p>
-        <div className="stop-metrics">
+        <dl className="stop-metrics" aria-label="Project at a glance">
           <div>
-            <strong>14</strong>
-            <span>microservices</span>
+            <dt>Microservices</dt>
+            <dd>14</dd>
           </div>
           <div>
-            <strong>23</strong>
-            <span>Maven modules</span>
+            <dt>Maven modules</dt>
+            <dd>23</dd>
           </div>
           <div>
-            <strong>8</strong>
-            <span>shared libraries</span>
+            <dt>Shared libraries</dt>
+            <dd>8</dd>
           </div>
-        </div>
+        </dl>
         <ul>
           <li>Choreography sagas and two-phase inventory reservation.</li>
           <li>Transactional outbox for reliable event publishing.</li>
