@@ -55,12 +55,13 @@ export function HeroScene() {
           renderer.toneMapping = THREE.ACESFilmicToneMapping;
           renderer.toneMappingExposure = 1.35;
           renderer.domElement.setAttribute("aria-hidden", "true");
-          renderer.domElement.style.touchAction = "pan-y";
           mount.appendChild(renderer.domElement);
           const scene = new THREE.Scene();
           const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
           camera.position.set(7.3, 5.3, 8.8);
           const orbit = new OrbitControls(camera, renderer.domElement);
+          // OrbitControls sets touch-action on connect; restore page scrolling afterward.
+          renderer.domElement.style.touchAction = "pan-y";
           orbit.enableZoom = false;
           orbit.enablePan = false;
           orbit.enableDamping = !preference.matches;
@@ -70,7 +71,7 @@ export function HeroScene() {
           orbit.maxPolarAngle = Math.PI / 2;
           // Preserve one-finger vertical page scrolling on touch screens.
           orbit.touches.ONE = null as unknown as TOUCH;
-          orbit.touches.TWO = THREE.TOUCH.ROTATE;
+          orbit.touches.TWO = THREE.TOUCH.DOLLY_ROTATE;
           orbit.update();
           orbit.saveState();
           const home = camera.position.clone();

@@ -197,7 +197,7 @@ export function DrivingPortfolio() {
     const page = container.current?.closest("main");
     page
       ?.querySelectorAll<HTMLElement>(
-        ".world-header, .world-intro, .world-minimap, .world-footer, .touch-drive, .world-canvas",
+        ".world-header, .world-intro, .world-mobile-start, .world-minimap, .world-footer, .touch-drive, .world-canvas",
       )
       .forEach((element) => {
         element.inert = entering !== null;
@@ -224,6 +224,10 @@ export function DrivingPortfolio() {
   function hold(key: keyof DriveInput, value: boolean) {
     world.current?.setInput(key, value);
     if (value) setIntro(false);
+  }
+  function startExploring() {
+    setIntro(false);
+    container.current?.querySelector("canvas")?.focus();
   }
   const near = stops.find((s) => s.id === car.nearby);
   const displayPanel = panel || lastPanel;
@@ -290,18 +294,22 @@ export function DrivingPortfolio() {
           <span>A playful world.</span>
         </h1>
         <p className="world-intro-copy">
-          I’m Minh. I build backends with Java & Go. Hop in and discover the
-          work, the ideas, and the person behind the code.
+          <span className="intro-copy-long">
+            I’m Minh. I build backends with Java & Go. Hop in and discover the
+            work, the ideas, and the person behind the code.
+          </span>
+          <span className="intro-copy-short">
+            I’m Minh. Java & Go engineer.
+            <br />
+            Welcome to my little world.
+          </span>
         </p>
         {intro ? (
           <div className="world-intro-actions">
             <button
               className="world-primary"
               disabled={status !== "ready"}
-              onClick={() => {
-                setIntro(false);
-                container.current?.querySelector("canvas")?.focus();
-              }}
+              onClick={startExploring}
             >
               Let’s explore <ArrowRight size={17} />
             </button>
@@ -327,6 +335,18 @@ export function DrivingPortfolio() {
           10.82° N, 106.63° E <span>·</span> HO CHI MINH CITY
         </span>
       </div>
+      {intro && (
+        <div className="world-mobile-start">
+          <button
+            className="world-primary"
+            disabled={status !== "ready"}
+            onClick={startExploring}
+          >
+            Let’s explore <ArrowRight size={18} />
+          </button>
+          <span>Five places. Your own pace.</span>
+        </div>
+      )}
       <div className="world-location">
         <span className="location-dot" /> {near ? near.title : "MINH’S WORLD"}{" "}
         <small>EXPLORE / 01</small>
@@ -338,7 +358,8 @@ export function DrivingPortfolio() {
       >
         <span className="minimap-heading">
           <Compass size={14} />
-          <span>FIELD MAP</span>
+          <span className="map-heading-full">FIELD MAP</span>
+          <span className="map-heading-compact">Map</span>
           <ArrowUpRight size={15} />
         </span>
         <span className="minimap-plan" aria-hidden="true">
@@ -376,7 +397,8 @@ export function DrivingPortfolio() {
           </span>
         </span>
         <span className="minimap-caption">
-          <strong>{progress.visited.length} / 5</strong> places discovered
+          <strong>{progress.visited.length} / 5</strong>
+          <span> places discovered</span>
         </span>
       </button>
       {status !== "failed" && (

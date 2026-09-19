@@ -38,6 +38,8 @@ The interface follows a field-guide style: cream paper, forest green controls, a
 
 Startup keeps the viewport and camera scale fixed while an illustrated loading screen fades into the world. The first rendered frame uses the final driving camera. Saved achievements never shrink the greeting: it becomes compact only after the visitor starts exploring during the current visit. Loading state selectors are separate from the fallback status-card styles.
 
+On phones and touch tablets, the driving camera follows the car into a clear central area. The map becomes a compact button, arrival prompts sit above the road, and driving controls stay along the lower edge. The mobile introduction has a separate lower start button and disappears during driving. Compact and landscape framing share the same behavior for startup, map travel, respawn, and returning from a stop. Canvas data attributes expose the rendered car's projected bounds for checking UI overlap. The Overview model preserves native one-finger vertical scrolling; two fingers rotate the model.
+
 The scene loads separately from the page, caps device pixel ratio, and suspends driving and rendering while paused or in a background tab. Reduced-motion preferences suppress decorative animation and use immediate transitions. Keyboard controls, touch controls, readable dialogs, and the overview route provide several ways to explore the work.
 
 The overview has its own motion system: a staged headline entrance, one-time scroll reveals, animated native experience disclosures, a reading-progress indicator, and an active section in the sticky navigation. Its custom beveled service lattice assembles on arrival, has damped drag rotation, and eases back to its home camera. Three.js loads when that scene approaches the viewport; offscreen scenes and diagram pulses pause. The header's Motion control pauses page animation, and resuming does not replay the entrance. No scroll interception or animation framework is used.
@@ -70,6 +72,7 @@ Next.js exports static HTML, CSS, and JavaScript to `out/`. GitHub Actions deplo
 - `src/lib/driving-physics.ts`: acceleration, steering, braking, collisions, and travel distance.
 - `src/app/world.css`: game interface, responsive layout, and transition styles.
 - `src/app/world-ui.css`: field-guide visual design, dialog layouts, touch refinements, and reduced-motion overrides.
+- `src/app/world-mobile.css`: compact phone/tablet HUD and a clear central driving area.
 - `src/components/stop-illustration.tsx`: five hand-authored isometric SVG destination thumbnails.
 - `src/app/overview/page.tsx`: readable portfolio at `/overview/`.
 - `src/components/hero-scene.tsx`: interactive Three.js service lattice on the overview route.

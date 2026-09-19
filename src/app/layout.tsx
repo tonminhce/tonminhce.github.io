@@ -3,6 +3,7 @@ import { Space_Grotesk, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import "./world.css";
 import "./world-ui.css";
+import "./world-mobile.css";
 const sans = Space_Grotesk({
   subsets: ["latin"],
   display: "swap",

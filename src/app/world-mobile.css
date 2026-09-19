@@ -1,0 +1,379 @@
+/* Keep the car's central driving area free. Match the compact camera layouts. */
+.intro-copy-short,
+.map-heading-compact,
+.world-mobile-start {
+  display: none;
+}
+@media (max-width: 760px),
+  (any-pointer: coarse) and (max-width: 1180px),
+  (max-height: 540px) and (max-width: 1180px) {
+  .world-intro {
+    top: 102px;
+    left: 22px;
+    max-width: calc(100% - 44px);
+  }
+  .world-intro h1 {
+    font-size: clamp(30px, 7.6vw, 44px);
+    margin: 14px 0;
+    transition: none;
+  }
+  .world-header .world-icon-button {
+    display: none;
+  }
+  .world-intro .world-eyebrow {
+    font-size: 8px;
+    letter-spacing: 0.025em;
+  }
+  .world-intro > p.world-intro-copy {
+    font-size: 12px;
+    line-height: 1.75;
+  }
+  .intro-copy-long,
+  .world-intro-actions,
+  .world-place,
+  .world-intro-compact,
+  .world-location {
+    display: none;
+  }
+  .intro-copy-short {
+    display: inline;
+  }
+  .world-mobile-start {
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    bottom: max(94px, calc(env(safe-area-inset-bottom) + 82px));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    z-index: 3;
+  }
+  .world-mobile-start .world-primary {
+    width: min(100%, 330px);
+    min-height: 52px;
+    font-size: 14px;
+    justify-content: space-between;
+    padding: 14px 22px;
+    border-radius: 28px;
+    box-shadow: 0 8px 24px #203a3520;
+  }
+  .world-mobile-start > span {
+    font: 9px var(--font-mono);
+    color: #435a3c;
+  }
+  .world-mobile-start,
+  .world-minimap,
+  .touch-drive {
+    transition:
+      opacity 300ms ease,
+      transform 400ms cubic-bezier(0.2, 0.75, 0.2, 1);
+  }
+  .world-loading .world-mobile-start,
+  .world-failed .world-mobile-start,
+  .is-entering .world-mobile-start {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .has-panel .world-mobile-start {
+    opacity: 0.32;
+  }
+  .is-intro .touch-drive,
+  .is-intro .world-minimap {
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .world-minimap {
+    top: 78px;
+    right: 18px;
+    bottom: auto;
+    left: auto;
+    width: auto;
+    min-width: 110px;
+    height: 44px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-radius: 24px;
+    background: #fff9eae8;
+    box-shadow: 0 4px 16px #3e4b2810;
+  }
+  .minimap-plan,
+  .minimap-heading .map-heading-full,
+  .minimap-heading > svg:last-child,
+  .minimap-caption > span {
+    display: none;
+  }
+  .minimap-heading {
+    font: 12px var(--font-sans);
+    color: #3b5336;
+    gap: 7px;
+  }
+  .minimap-heading .map-heading-compact,
+  .minimap-heading > svg:first-child {
+    display: inline;
+  }
+  .minimap-caption {
+    margin: 0;
+    font: 10px var(--font-mono);
+    color: #415736;
+  }
+  .minimap-caption strong {
+    display: inline;
+  }
+  .world-footer {
+    left: 16px;
+    right: 16px;
+    bottom: max(14px, env(safe-area-inset-bottom));
+    min-height: 56px;
+    padding: 6px 7px 6px 15px;
+    border-radius: 29px;
+    background: #fff9ecd9;
+    gap: 10px;
+  }
+  .keyboard-hint,
+  .trip-distance {
+    display: none;
+  }
+  .world-trip {
+    font-size: 11px;
+    gap: 0;
+  }
+  .world-utility {
+    gap: 3px;
+  }
+  .world-utility button {
+    height: 44px;
+    width: 44px;
+  }
+  .touch-drive {
+    display: grid;
+    left: 20px;
+    bottom: max(86px, calc(env(safe-area-inset-bottom) + 72px));
+    width: 160px;
+    grid-template-columns: repeat(3, 50px);
+    grid-template-rows: 50px 50px;
+    gap: 5px;
+  }
+  .touch-drive button {
+    display: grid;
+    place-items: center;
+    background: #fffaebe6;
+    border: 1px solid #5c785866;
+    border-radius: 16px;
+    color: #365532;
+    box-shadow: 0 3px 0 #71835a26;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .touch-drive button:active {
+    background: #526c43;
+    color: #fff5dd;
+    transform: translateY(2px);
+    box-shadow: none;
+  }
+  .touch-forward {
+    grid-column: 2;
+  }
+  .touch-left {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .touch-reverse {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .touch-right {
+    grid-column: 3;
+    grid-row: 2;
+  }
+  .world-stop-prompt {
+    top: 152px;
+    bottom: auto;
+    left: 50%;
+    width: calc(100% - 36px);
+    min-width: 0;
+    max-width: 390px;
+    min-height: 66px;
+    padding: 13px 16px;
+    gap: 12px;
+    border-radius: 18px;
+    background: #2d4839f5;
+  }
+  .world-stop-prompt strong {
+    font-size: 17px;
+  }
+  .world-stop-prompt small {
+    font-size: 8px;
+  }
+  .stop-key {
+    display: none;
+  }
+  .stop-explore {
+    font-size: 12px;
+  }
+  .achievement-toast {
+    top: 78px;
+    bottom: auto;
+    left: 18px;
+    right: auto;
+    max-width: calc(100% - 156px);
+    padding: 11px 12px;
+    gap: 8px;
+    border-radius: 14px;
+  }
+  .achievement-toast > svg {
+    width: 18px;
+  }
+  .achievement-toast span {
+    font-size: 6px;
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+  }
+  .achievement-toast strong {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+  .world-vignette {
+    background: linear-gradient(
+        180deg,
+        #f2ead9eb,
+        #f2ead99c 19%,
+        transparent 37%
+      ),
+      linear-gradient(0deg, #ede3cdbf, transparent 20%);
+  }
+  .is-exploring .world-vignette {
+    opacity: 0.4;
+  }
+}
+@media (max-width: 760px) and (max-height: 650px) {
+  .world-intro {
+    top: 90px;
+    left: 20px;
+  }
+  .world-intro h1 {
+    font-size: 29px;
+    margin: 12px 0;
+  }
+  .world-intro .world-eyebrow {
+    font-size: 7px;
+  }
+  .world-intro > p.world-intro-copy {
+    font-size: 11px;
+    line-height: 1.6;
+  }
+  .world-mobile-start {
+    bottom: 89px;
+    gap: 7px;
+  }
+  .world-mobile-start .world-primary {
+    min-height: 46px;
+  }
+  .touch-drive {
+    width: 145px;
+    grid-template-columns: repeat(3, 45px);
+    grid-template-rows: 45px 45px;
+  }
+}
+@media (max-height: 540px) and (max-width: 1180px) {
+  .world-header {
+    top: 12px;
+    left: 18px;
+    right: 18px;
+  }
+  .world-intro {
+    top: 79px;
+    left: 22px;
+    max-width: 230px;
+  }
+  .world-intro h1 {
+    font-size: 27px;
+  }
+  .world-intro .world-eyebrow,
+  .world-intro > p.world-intro-copy {
+    display: none;
+  }
+  .world-mobile-start {
+    left: 22px;
+    right: auto;
+    bottom: 91px;
+    width: 188px;
+    align-items: flex-start;
+  }
+  .world-mobile-start .world-primary {
+    min-height: 46px;
+    padding: 12px 18px;
+    font-size: 12px;
+  }
+  .world-mobile-start > span {
+    display: none;
+  }
+  .world-minimap {
+    top: 76px;
+    right: 18px;
+  }
+  .world-stop-prompt {
+    top: 76px;
+    width: min(300px, calc(100% - 300px));
+    min-height: 57px;
+    padding: 11px 14px;
+  }
+  .world-stop-prompt strong {
+    font-size: 15px;
+  }
+  .world-stop-prompt small {
+    font-size: 7px;
+  }
+  .stop-explore {
+    font-size: 10px;
+    gap: 5px;
+  }
+  .touch-drive {
+    width: 154px;
+    grid-template-columns: repeat(3, 48px);
+    grid-template-rows: 48px 48px;
+    bottom: 84px;
+  }
+  .achievement-toast {
+    top: auto;
+    bottom: 88px;
+    left: auto;
+    right: 18px;
+    max-width: 174px;
+  }
+}
+@media (max-height: 540px) and (max-width: 500px) {
+  .world-stop-prompt {
+    top: 126px;
+    width: calc(100% - 36px);
+    min-height: 44px;
+    padding: 10px 14px;
+  }
+  .world-stop-prompt small {
+    display: none;
+  }
+  .world-stop-prompt strong {
+    margin: 0;
+    font-size: 14px;
+  }
+  .touch-drive {
+    width: 142px;
+    grid-template-columns: repeat(3, 44px);
+    grid-template-rows: 44px 44px;
+  }
+  .world-intro h1 {
+    font-size: 26px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .world-mobile-start,
+  .world-minimap,
+  .touch-drive {
+    transition: none;
+  }
+}

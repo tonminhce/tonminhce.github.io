@@ -53,8 +53,17 @@ export class DrivingWorld {
   private paused = false;
   private disposed = false;
   private cameraTarget = new THREE.Vector3();
+  private readonly drivingCameraOffset = new THREE.Vector3(30, 40, 34);
+  private readonly drivingCameraUp = new THREE.Vector3(0, 1, 0)
+    .projectOnPlane(this.drivingCameraOffset)
+    .normalize();
+  private cameraLayout: "desktop" | "compact" | "landscape" = "desktop";
+  private canvasViewport = { left: 0, top: 0, width: 1, height: 1 };
+  private readonly projectedCar = new THREE.Vector3();
+  private readonly carCorners: THREE.Vector3[] = [];
   private resizeObserver: ResizeObserver;
   private reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  private coarsePointer = window.matchMedia("(any-pointer: coarse)");
   private nearby: StopId | null = null;
   private pointerDown = false;
   private cameraTween: {
@@ -137,20 +146,28 @@ export class DrivingWorld {
     this.createCampus();
     this.addDetails();
     this.createCar();
+    const vehicleBounds = new THREE.Box3().setFromObject(this.vehicle);
+    for (const x of [vehicleBounds.min.x, vehicleBounds.max.x])
+      for (const y of [vehicleBounds.min.y, vehicleBounds.max.y])
+        for (const z of [vehicleBounds.min.z, vehicleBounds.max.z])
+          this.carCorners.push(new THREE.Vector3(x, y, z));
     this.createPackets();
     this.createEffects();
     // The first framebuffer uses the same framing as normal driving.
     this.vehicle.position.set(this.car.x, 0, this.car.z);
     this.vehicle.rotation.y = this.car.heading;
-    this.cameraTarget.set(this.car.x * 0.7, 0, this.car.z * 0.7 - 2);
-    this.camera.position
-      .copy(this.cameraTarget)
-      .add(new THREE.Vector3(30, 40, 34));
+    this.cameraLayout = this.getCameraLayout(
+      this.container.clientWidth,
+      this.container.clientHeight,
+    );
+    this.getDrivingTarget(this.cameraTarget);
+    this.camera.position.copy(this.cameraTarget).add(this.drivingCameraOffset);
     this.camera.zoom = 1;
     this.camera.lookAt(this.cameraTarget);
     this.resizeObserver = new ResizeObserver(this.resize);
     this.resizeObserver.observe(container);
     this.resize();
+    this.coarsePointer.addEventListener("change", this.resize);
     window.addEventListener("keydown", this.keyDown);
     window.addEventListener("keyup", this.keyUp);
     window.addEventListener("blur", this.clearInput);
@@ -708,6 +725,24 @@ export class DrivingWorld {
       t.done?.();
     }
   }
+  private getCameraLayout(width: number, height: number) {
+    const shortLandscape = width > height && width <= 1180 && height <= 540;
+    if (shortLandscape) return "landscape";
+    if (width <= 760 || (this.coarsePointer.matches && width <= 1180))
+      return "compact";
+    return "desktop";
+  }
+  private getDrivingTarget(target = new THREE.Vector3()) {
+    if (this.cameraLayout === "desktop")
+      return target.set(this.car.x * 0.7, 0, this.car.z * 0.7 - 2);
+
+    // Follow the vehicle itself on small screens, keeping its roof and wheels
+    // inside the clear space between the upper HUD and lower driving controls.
+    target.set(this.car.x, 1, this.car.z);
+    if (this.cameraLayout === "landscape")
+      target.addScaledVector(this.drivingCameraUp, 2);
+    return target;
+  }
   public enterStop(id: StopId, done: () => void) {
     const stop = stops.find((s) => s.id === id)!;
     this.focusedStop = id;
@@ -733,16 +768,11 @@ export class DrivingWorld {
     if (!this.cameraTween || !this.focusedStop) return;
     this.cameraTween.duration = 0;
     this.animateCamera();
-    this.renderer.render(this.scene, this.camera);
+    this.renderFrame(true);
   }
   public leaveStop() {
     this.focusedStop = null;
-    this.tweenCamera(
-      new THREE.Vector3(this.car.x * 0.7, 0, this.car.z * 0.7 - 2),
-      new THREE.Vector3(30, 40, 34),
-      1,
-      0.8,
-    );
+    this.tweenCamera(this.getDrivingTarget(), this.drivingCameraOffset, 1, 0.8);
   }
   private keyDown = (e: KeyboardEvent) => {
     if (
@@ -857,14 +887,9 @@ export class DrivingWorld {
     this.car = { ...initialCar, distance };
     this.clearInput();
     this.focusedStop = null;
-    this.tweenCamera(
-      new THREE.Vector3(this.car.x * 0.7, 0, this.car.z * 0.7 - 2),
-      new THREE.Vector3(30, 40, 34),
-      1,
-      0.8,
-    );
+    this.tweenCamera(this.getDrivingTarget(), this.drivingCameraOffset, 1, 0.8);
     this.update(0);
-    this.renderer.render(this.scene, this.camera);
+    this.renderFrame(true);
   }
   public teleport(id: StopId) {
     const stop = stops.find((s) => s.id === id)!;
@@ -882,19 +907,18 @@ export class DrivingWorld {
     (this.arrivalRing.material as THREE.MeshBasicMaterial).color.set(
       stop.color,
     );
-    this.tweenCamera(
-      new THREE.Vector3(this.car.x * 0.7, 0, this.car.z * 0.7 - 2),
-      new THREE.Vector3(30, 40, 34),
-      1,
-      0.8,
-    );
+    this.tweenCamera(this.getDrivingTarget(), this.drivingCameraOffset, 1, 0.8);
     this.update(0);
-    this.renderer.render(this.scene, this.camera);
+    this.renderFrame(true);
   }
   private resize = () => {
+    if (this.disposed) return;
     const w = this.container.clientWidth,
       h = this.container.clientHeight,
       aspect = w / Math.max(h, 1);
+    const nextLayout = this.getCameraLayout(w, h);
+    const layoutChanged = nextLayout !== this.cameraLayout;
+    this.cameraLayout = nextLayout;
     const span = 25;
     this.camera.left = -span * aspect;
     this.camera.right = span * aspect;
@@ -902,7 +926,28 @@ export class DrivingWorld {
     this.camera.bottom = -span;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(w, h);
-    this.renderer.render(this.scene, this.camera);
+    const bounds = this.renderer.domElement.getBoundingClientRect();
+    this.canvasViewport = {
+      left: bounds.left,
+      top: bounds.top,
+      width: bounds.width,
+      height: bounds.height,
+    };
+    if (layoutChanged && !this.focusedStop) {
+      // Reframe from the visible camera, including while paused. Retargeting a
+      // return journey preserves its completion callback and never snaps.
+      const tween = this.cameraTween;
+      this.tweenCamera(
+        this.getDrivingTarget(),
+        this.drivingCameraOffset,
+        1,
+        tween
+          ? Math.max(0.35, tween.duration - (this.clock - tween.started))
+          : 0.5,
+        tween?.done,
+      );
+    }
+    this.renderFrame(true);
   };
   private update(dt: number) {
     if (!this.paused && !this.focusedStop)
@@ -944,14 +989,16 @@ export class DrivingWorld {
     for (const wheel of this.wheels)
       wheel.rotation.x -= this.car.speed * dt * 2.3;
     if (!this.cameraTween && !this.focusedStop) {
-      this.carFocus.set(x * 0.7, 0, z * 0.7 - 2);
+      this.getDrivingTarget(this.carFocus);
       this.cameraTarget.lerp(
         this.carFocus,
-        this.reducedMotion.matches ? 1 : 1 - Math.exp(-dt * 3.3),
+        this.reducedMotion.matches
+          ? 1
+          : 1 - Math.exp(-dt * (this.cameraLayout === "desktop" ? 3.3 : 7.5)),
       );
       this.camera.position
         .copy(this.cameraTarget)
-        .add(new THREE.Vector3(30, 40, 34));
+        .add(this.drivingCameraOffset);
       this.camera.lookAt(this.cameraTarget);
     }
     let near: StopId | null = null;
@@ -987,10 +1034,48 @@ export class DrivingWorld {
         : 0.48;
     });
     this.animateEffects(dt);
-    if (this.clock - this.lastUi > 0.08 || dt === 0) {
+  }
+  private renderFrame(forceUpdate = false) {
+    this.renderer.render(this.scene, this.camera);
+    if (this.clock - this.lastUi > 0.08 || forceUpdate) {
       this.lastUi = this.clock;
-      this.callbacks.onUpdate({ ...this.car, nearby: near });
+      this.publishCarViewport();
+      this.callbacks.onUpdate({ ...this.car, nearby: this.nearby });
     }
+  }
+  private publishCarViewport() {
+    const { left, top, width, height } = this.canvasViewport;
+    const data = this.renderer.domElement.dataset;
+    const point = this.projectedCar;
+    point
+      .set(0, 1, 0)
+      .applyMatrix4(this.vehicle.matrixWorld)
+      .project(this.camera);
+    data.carScreenX = (left + ((point.x + 1) * width) / 2).toFixed(1);
+    data.carScreenY = (top + ((1 - point.y) * height) / 2).toFixed(1);
+    let minX = Infinity,
+      minY = Infinity,
+      maxX = -Infinity,
+      maxY = -Infinity;
+    for (const corner of this.carCorners) {
+      point
+        .copy(corner)
+        .applyMatrix4(this.vehicle.matrixWorld)
+        .project(this.camera);
+      const x = left + ((point.x + 1) * width) / 2;
+      const y = top + ((1 - point.y) * height) / 2;
+      minX = Math.min(minX, x);
+      minY = Math.min(minY, y);
+      maxX = Math.max(maxX, x);
+      maxY = Math.max(maxY, y);
+    }
+    // Read-only observations for checking the rendered car against DOM HUD
+    // bounds; they use the same cadence as the visible trip information.
+    data.carScreenLeft = minX.toFixed(1);
+    data.carScreenTop = minY.toFixed(1);
+    data.carScreenRight = maxX.toFixed(1);
+    data.carScreenBottom = maxY.toFixed(1);
+    data.cameraLayout = this.cameraLayout;
   }
   private tick = (now: number) => {
     this.raf = 0;
@@ -1001,7 +1086,7 @@ export class DrivingWorld {
     this.clock += dt;
     this.update(dt);
     this.animateCamera();
-    this.renderer.render(this.scene, this.camera);
+    this.renderFrame();
     if (!this.paused || this.cameraTween)
       this.raf = requestAnimationFrame(this.tick);
   };
@@ -1020,6 +1105,7 @@ export class DrivingWorld {
     this.disposed = true;
     cancelAnimationFrame(this.raf);
     this.resizeObserver.disconnect();
+    this.coarsePointer.removeEventListener("change", this.resize);
     window.removeEventListener("keydown", this.keyDown);
     window.removeEventListener("keyup", this.keyUp);
     window.removeEventListener("blur", this.clearInput);
